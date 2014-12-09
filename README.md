@@ -5,6 +5,15 @@ A simple type safe linear algebra library. It's not the most efficient as it use
 
 It was mainly used as a playground for DataKinds and to see if I could make a neural network with typed input and output counts.
 
+Many of the functions require a constraints such as (Applicative (Vector n)) because unfortunately GHC can not inductively deduce typeclass instances such as ∀n.Applicative (Vector n) from
+```haskell
+instance Applicative (Vector Z) where
+  ....
+
+instance Applicative (Vector n) => Applicative (Vector (S n)) where
+  ....
+```
+
 Some nice use examples:
 
 λ= eye :: Matrix Three Three Int
