@@ -67,12 +67,12 @@ rows (Above r rs) = r :- rows rs
 cols    :: Matrix m n a -> Vector n (Vector m a)
 cols = rows . transpose
 
-infixl 7 #.,.#
-(#.) :: (Applicative (Vector n), Num a) => Matrix m n a -> Vector n a -> Vector m a
-m #. v = first . cols $ m <> (columnVector v)
+infixl 7 <#.>,<.#>
+(<#.>) :: (Applicative (Vector n), Num a) => Matrix m n a -> Vector n a -> Vector m a
+m <#.> v = first . cols $ m <#> (columnVector v)
 
-(.#) :: (Applicative (Vector m), Num a) => Vector m a -> Matrix m n a -> Vector n a
-v .# m = first . rows $ (rowVector v) <> m
+(<.#>) :: (Applicative (Vector m), Num a) => Vector m a -> Matrix m n a -> Vector n a
+v <.#> m = first . rows $ (rowVector v) <#> m
 
 type family ( (n :: Nat) :+: (m :: Nat) ) :: Nat where
   (One   :+: m) = (S m)
@@ -103,9 +103,9 @@ transpose :: Matrix m n a -> Matrix n m a
 transpose (Row xs)        = columnVector xs
 transpose (Above r rs   ) = columnVector r <|> transpose rs 
 
-infixl 7 <>
-(<>) :: (Applicative (Vector n), Num a) =>  Matrix m n a -> Matrix n o a -> Matrix m o a
-m1 <> m2 = toMatrix ((\r -> (<.> r) <$> cols m2) <$> rows m1)
+infixl 7 <#>
+(<#>) :: (Applicative (Vector n), Num a) =>  Matrix m n a -> Matrix n o a -> Matrix m o a
+m1 <#> m2 = toMatrix ((\r -> (<.> r) <$> cols m2) <$> rows m1)
 
 toMatrix :: Vector m (Vector n a) -> Matrix m n a
 toMatrix (Scalar xs) = Row xs
