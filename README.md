@@ -7,7 +7,7 @@ It was mainly used as a playground for DataKinds and to see if I could make a ne
 
 Many of the functions require a constraints such as (Applicative (Vector n)) because unfortunately GHC can not inductively deduce typeclass instances such as ∀n.Applicative (Vector n) from
 ```haskell
-instance Applicative (Vector Z) where
+instance Applicative (Vector One) where
   ....
 
 instance Applicative (Vector n) => Applicative (Vector (S n)) where
@@ -16,7 +16,7 @@ instance Applicative (Vector n) => Applicative (Vector (S n)) where
 
 Some nice use examples:
 
-λ= eye :: Matrix Three Three Int
+λ= eye :: Matrix Three Three Int -- The Identity Matrix 
 ```
 |	1	0	0	|
 |				|
@@ -26,19 +26,25 @@ Some nice use examples:
 ```
 
 
-λ= pure 1 :: Vector Two Int
+λ= pure 1 :: Vector Two Int -- The Applicative Instance of a Vector
 ```
 1 :- (1)
 ```
 
 
-λ= :t (<#.>)
+λ= liftA2 (+) (pure 1 :: Vector Two Int) (pure 3) -- (<*>) is pointwise
+```
+4 :- (4)
+``` 
+
+
+λ= :t (<#.>) -- Matrix * Vector multiplication
 ```
 (<#.>) :: (Applicative (Vector n), Num a) => Matrix m n a -> Vector n a -> Vector m a
 ```
 
 
-λ= eye <#.> (1 :- 2 :- 3 :- Scalar 4)
+λ= eye <#.> (1 :- 2 :- 3 :- Scalar 4) -- Notice the type of 'eye' is inferred
 ```
 1 :- (2 :- (3 :- (4)))
 ````
@@ -50,13 +56,13 @@ Some nice use examples:
 ```
 
 
-λ= :t (<#>)
+λ= :t (<#>) -- Matrix * Matrix multiplication
 ```
 (<#>) :: (Applicative (Vector n), Num a) => Matrix m n a -> Matrix n o a -> Matrix m o a
 ```
 
 
-λ= (pure :: Matrix Three Two Int) <#> eye
+λ= (pure :: Matrix Three Two Int) <#> eye -- Notice again that the type of eye is inferred
 ```
 |	5	5	5	|
 |				|
@@ -64,7 +70,7 @@ Some nice use examples:
 ```
 
 
-λ= eye <#> (pure :: Matrix Three Two Int)
+λ= eye <#> (pure :: Matrix Three Two Int) -- (eye <#>) == (<#> eye) == id
 ```
 |	5	5	5	|
 |				|
