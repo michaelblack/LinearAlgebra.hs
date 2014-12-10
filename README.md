@@ -62,7 +62,7 @@ Some nice use examples:
 ```
 
 
-λ= (pure :: Matrix Three Two Int) <#> eye -- Notice again that the type of eye is inferred
+λ= (pure 5 :: Matrix Three Two Int) <#> eye -- Notice again that the type of eye is inferred
 ```
 |	5	5	5	|
 |				|
@@ -70,7 +70,7 @@ Some nice use examples:
 ```
 
 
-λ= eye <#> (pure :: Matrix Three Two Int) -- (eye <#>) == (<#> eye) == id
+λ= eye <#> (pure 5 :: Matrix Three Two Int) -- (eye <#>) == (<#> eye) == id
 ```
 |	5	5	5	|
 |				|
